@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     private float targetRotation = 0.0f;
     private float rotationVelocity;
     private float verticalVelocity;
-    public float inugami;
+    
 
 
     // 카메라
@@ -43,11 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // 플레이어 이동 input값
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        move = new Vector2(horizontal, vertical);              
-
+        // 플레이어의 이동(PlayerController)
         Movement();
 
         // 카메라 input값
@@ -56,6 +52,15 @@ public class PlayerMovement : MonoBehaviour
         look = new Vector2(hMouse, vMouse);
 
         isSprint = Input.GetKey(KeyCode.LeftShift);
+        if (isSprint)
+        {
+            anim.SetFloat("MotionSpeed", 1.2f);
+        }
+        else
+        {
+            anim.SetFloat("MotionSpeed", 1f);
+        }
+
         isStrafe = Input.GetKey(KeyCode.Mouse1);
 
         if (isStrafe)
@@ -73,7 +78,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Movement()
-    {              
+    {
+        // 플레이어 이동 input값
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        move = new Vector2(horizontal, vertical);
+
         // isSprint에 따라 스피드 변화
         float targetSpeed = isSprint ? sprintSpeed : moveSpeed;
 
@@ -128,6 +138,11 @@ public class PlayerMovement : MonoBehaviour
         // Controller 이동
         controller.Move(targetDirection.normalized * (speed * Time.deltaTime) +
                          new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
+
+    }
+
+    private void CameraRotation()
+    {
 
     }
 
